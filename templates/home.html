@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>login to forum</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="wdth=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Login Form</h1>
+    <h1>Forum Home</h1>
+    {{if .Email}}
+    <p>Logged in as {{.Email}}</p>
+    <a href="/create-post">New Post</a>
+    {{else}}
+    <p>You are not logged in</p>
+    {{end}}
+
+    {{range .Posts}}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h2>{{.Title}}</h2>
+        <p>{{.Content}}</p>
+        <small>By {{.Author}} in <strong>{{.Category}}</strong> on {{.Created}}</small>
+    </div>
+    {{end}}
+
+</body>
+
+</html>

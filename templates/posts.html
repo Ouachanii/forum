@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>create-post</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="wdth=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <h1>Create your post</h1>
+        </header>
+        <form method="POST" action="/create-post">
+            <input type="text" name="title"><br>
+            <br><textarea name="content"></textarea><br>
+
+            <select name="category">
+              <option value="Tech">Tech</option>
+              <option value="News">News</option>
+              <option value="Games">Games</option>
+              <option value="Other">Other</option>
+            </select><br>
+            <input type="submit" value="Post">
+        </form>
+    </body>
+</html>
