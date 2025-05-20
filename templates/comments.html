@@ -18,6 +18,27 @@
     <div style="margin-left:20px; border:1px solid #eee; padding:5px;">
         <p>{{.Content}}</p>
         <small>By {{.Author}} on {{.Created}}</small>
+        <form method="POST" action="/like" style="display:inline;">
+            <input type="hidden" name="target_id" value="{{.ID}}">
+            <input type="hidden" name="target_type" value="comment">
+            <input type="hidden" name="value" value="1">
+            <input type="submit" value="👍">
+        </form>
+
+        <form method="POST" action="/like" style="display:inline;">
+            <input type="hidden" name="target_id" value="{{.ID}}">
+            <input type="hidden" name="target_type" value="comment">
+            <input type="hidden" name="value" value="-1">
+            <input type="submit" value="👎">
+        </form>
+        {{if .Likes}}
+        <br>Likes: {{.Likes}} | Dislikes: {{.Dislikes}}
+        {{else}}
+        <br>Likes: 0 | Dislikes: 0
+        {{end}}
+        <br>
+        <small>Likes: {{.Likes}} | Dislikes: {{.Dislikes}}</small>
+        <br>
     </div>
     {{end}}
 

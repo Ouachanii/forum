@@ -66,9 +66,12 @@ func ViewPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var comments []struct {
+		ID 	int
 		Content string
 		Author  string
 		Created string
+		Likes	int
+		Dislikes int
 	}
 
 	for rows.Next() {
