@@ -58,6 +58,20 @@ CREATE TABLE IF NOT EXISTS comments (
 	if err != nil {
 		log.Fatal(err)
 	}
+	createLikesTable := `
+CREATE TABLE IF NOT EXISTS likes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user TEXT NOT NULL,
+    target_id INTEGER NOT NULL,
+    target_type TEXT NOT NULL, -- 'post' or 'comment'
+    value INTEGER NOT NULL, -- 1 = like, -1 = dislike
+    UNIQUE(user, target_id, target_type)
+);`
+_, err = DB.Exec(createLikesTable)
+if err != nil {
+    log.Fatal(err)
+}
+	// Create categories table
 	createCategoryTable := `
 CREATE TABLE IF NOT EXISTS categories (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,

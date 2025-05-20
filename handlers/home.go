@@ -10,10 +10,10 @@ import (
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	// tmpl, _ := template.New("home").Parse(`
-    //     <h1>Welcome to the Forum</h1>
-    //     {{if .Email}}<p>Logged in as {{.Email}}</p>{{else}}<p>Not logged in</p>{{end}}
-    //     <a href="/login">Login</a> | <a href="/register">Register</a>
-    // `)
+	//     <h1>Welcome to the Forum</h1>
+	//     {{if .Email}}<p>Logged in as {{.Email}}</p>{{else}}<p>Not logged in</p>{{end}}
+	//     <a href="/login">Login</a> | <a href="/register">Register</a>
+	// `)
 
 	// email, ok := sessions.GetUserEmail(r)
 	// data := struct {
@@ -41,12 +41,21 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		Author   string
 		Category string
 		Created  string
+		Likes    int
+		Dislikes int
 	}
+
+	
 
 	var posts []Post
 	for rows.Next() {
 		var p Post
 		rows.Scan(&p.ID, &p.Title, &p.Content, &p.Author, &p.Category, &p.Created)
+
+		// count likes/dislikes
+		database.DB.QueryRow(`SELECT COUNT(*) FROM likes WHERE target_id = ? AND target_type = 'post' AND value = 1`, p.ID).Scan(&p.Likes)
+		database.DB.QueryRow(`SELECT COUNT(*) FROM likes WHERE target_id = ? AND target_type = 'post' AND value = -1`, p.ID).Scan(&p.Dislikes)
+
 		posts = append(posts, p)
 	}
 

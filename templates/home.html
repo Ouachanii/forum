@@ -20,9 +20,24 @@
 
     {{range .Posts}}
     <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-        <h2>{{.Title}}</h2>
+        <h2><a href="/post?id={{.ID}}">{{.Title}}</a></h2>
         <p>{{.Content}}</p>
-        <small>By {{.Author}} in <strong>{{.Category}}</strong> on {{.Created}}</small>
+        <small>By {{.Author}} in <strong>{{.Category}}</strong> on {{.Created}}</small><br>
+
+        <form method="POST" action="/like" style="display:inline;">
+            <input type="hidden" name="target_id" value="{{.ID}}">
+            <input type="hidden" name="target_type" value="post">
+            <input type="hidden" name="value" value="1">
+            <input type="submit" value="👍">
+        </form>
+
+        <form method="POST" action="/like" style="display:inline;">
+            <input type="hidden" name="target_id" value="{{.ID}}">
+            <input type="hidden" name="target_type" value="post">
+            <input type="hidden" name="value" value="-1">
+            <input type="submit" value="👎">
+        </form>
+        {{.Likes}} | Dislikes: {{.Dislikes}}
     </div>
     {{end}}
 

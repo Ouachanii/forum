@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h2>{{.Post.Title}}</h2>
+    <p>{{.Post.Content}}</p>
+    <small>By {{.Post.Author}} in {{.Post.Category}} on {{.Post.Created}}</small>
+
+    <h3>Comments:</h3>
+    {{range .Comments}}
+    <div style="margin-left:20px; border:1px solid #eee; padding:5px;">
+        <p>{{.Content}}</p>
+        <small>By {{.Author}} on {{.Created}}</small>
+    </div>
+    {{end}}
+
+    {{if .Email}}
+    <form method="POST" action="/comment">
+        <input type="hidden" name="post_id" value="{{.Post.ID}}">
+        <textarea name="content" placeholder="Write a comment..."></textarea><br>
+        <input type="submit" value="Comment">
+    </form>
+    {{else}}
+    <p><a href="/login">Log in</a> to comment.</p>
+    {{end}}
+
+    <p><a href="/">← Back to forum</a></p>
+
+</body>
+
+</html>

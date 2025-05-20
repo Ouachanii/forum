@@ -13,5 +13,8 @@ func main() {
 	http.HandleFunc("/login", handlers.Login)
 	http.HandleFunc("/home", handlers.Home)
 	http.HandleFunc("/create_post", handlers.CreatePost)
+	http.HandleFunc("/post", handlers.ViewPost)
+	http.HandleFunc("/comment", handlers.SubmitComment)
+
 	http.ListenAndServe(":8080", nil)
 }
