@@ -1,9 +1,10 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 	"forum/database"
 	"forum/handlers"
+	"net/http"
 )
 
 func main() {
@@ -17,4 +18,5 @@ func main() {
 	http.HandleFunc("/comment", handlers.SubmitComment)
 
 	http.ListenAndServe(":8080", nil)
+	fmt.Println("Server started on :8080\nto view the forum visit: http://localhost:8080/home")
 }

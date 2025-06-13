@@ -16,7 +16,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "GET" {
-		tmpl, _ := template.ParseFiles("templates/create_post.html")
+		tmpl, _ := template.ParseFiles("templates/create-post.html")
 		tmpl.Execute(w, nil)
 		return
 	}
@@ -66,19 +66,22 @@ func ViewPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var comments []struct {
-		ID 	int
-		Content string
-		Author  string
-		Created string
-		Likes	int
+		ID       int
+		Content  string
+		Author   string
+		Created  string
+		Likes    int
 		Dislikes int
 	}
 
 	for rows.Next() {
 		var c struct {
-			Content string
-			Author  string
-			Created string
+			ID       int
+			Content  string
+			Author   string
+			Created  string
+			Likes    int
+			Dislikes int
 		}
 		rows.Scan(&c.Content, &c.Author, &c.Created)
 		comments = append(comments, c)
@@ -86,14 +89,17 @@ func ViewPost(w http.ResponseWriter, r *http.Request) {
 
 	email, _ := sessions.GetUserEmail(r)
 
-	tmpl, _ := template.ParseFiles("templates/post_detail.html")
+	tmpl, _ := template.ParseFiles("templates/comments.html")
 	tmpl.Execute(w, struct {
 		Email    string
 		Post     any
 		Comments []struct {
-			Content string
-			Author  string
-			Created string
+			ID       int
+			Content  string
+			Author   string
+			Created  string
+			Likes    int
+			Dislikes int
 		}
 	}{
 		Email:    email,
@@ -103,26 +109,26 @@ func ViewPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func SubmitComment(w http.ResponseWriter, r *http.Request) {
-    email, ok := sessions.GetUserEmail(r)
-    if !ok {
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
-        return
-    }
+	email, ok := sessions.GetUserEmail(r)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
-    if r.Method != "POST" {
-        http.Redirect(w, r, "/", http.StatusSeeOther)
-        return
-    }
+	if r.Method != "POST" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 
-    r.ParseForm()
-    postID := r.FormValue("post_id")
-    content := r.FormValue("content")
+	r.ParseForm()
+	postID := r.FormValue("post_id")
+	content := r.FormValue("content")
 
-    _, err := database.DB.Exec(`INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)`, postID, email, content)
-    if err != nil {
-        http.Error(w, "Failed to add comment", http.StatusInternalServerError)
-        return
-    }
+	_, err := database.DB.Exec(`INSERT INTO comments (post_id, author, content) VALUES (?, ?, ?)`, postID, email, content)
+	if err != nil {
+		http.Error(w, "Failed to add comment", http.StatusInternalServerError)
+		return
+	}
 
-    http.Redirect(w, r, "/post?id="+postID, http.StatusSeeOther)
+	http.Redirect(w, r, "/post?id="+postID, http.StatusSeeOther)
 }
